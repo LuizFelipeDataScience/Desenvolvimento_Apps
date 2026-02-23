@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administração - Portal KanaData</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #00A4D2 0%, #015A83 50%, #004559 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #015A83 0%, #004559 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(194, 232, 251, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 i {
+            margin-right: 15px;
+            color: #C2E8FB;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn i {
+            transition: transform 0.3s;
+        }
+
+        .btn:hover i {
+            transform: scale(1.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00A4D2 0%, #015A83 100%);
+            color: white;
+            border: 2px solid transparent;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 164, 210, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #004559;
+            border: 2px solid #D9D9D9;
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #C2E8FB 0%, #ffffff 100%);
+            border-color: #00A4D2;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 164, 210, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+        }
+
+        .btn-edit {
+            background: linear-gradient(135deg, #00A4D2 0%, #015A83 100%);
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: linear-gradient(135deg, #015A83 0%, #004559 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 164, 210, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+            color: #004559;
+        }
+
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #e0a800 0%, #d39e00 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
+        }
+
+        .dashboards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .dashboard-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border: 2px solid #D9D9D9;
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(1, 90, 131, 0.2);
+            border-color: #00A4D2;
+        }
+
+        .dashboard-card h3 {
+            color: #004559;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            word-wrap: break-word;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dashboard-preview {
+            width: 100%;
+            height: 0;
+            padding-bottom: 50%;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f0f0f0;
+            position: relative;
+            border: 2px solid #D9D9D9;
+        }
+
+        .dashboard-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: white;
+        }
+
+        .dashboard-preview-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #C2E8FB 0%, #a8d8f0 100%);
+            color: #004559;
+            font-size: 3em;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .dashboard-card h3 i {
+            color: #00A4D2;
+        }
+
+        .dashboard-card .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .dashboard-card .meta p {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dashboard-card .meta i {
+            color: #00A4D2;
+            width: 16px;
+        }
+
+        .dashboard-card .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .status-published {
+            background: linear-gradient(135deg, #C2E8FB 0%, #a8d8f0 100%);
+            color: #004559;
+        }
+
+        .status-unpublished {
+            background: linear-gradient(135deg, #D9D9D9 0%, #c0c0c0 100%);
+            color: #666;
+        }
+
+        .dashboard-card .actions-card {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .dashboard-card .btn {
+            padding: 8px 16px;
+            font-size: 0.9em;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-state h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+            color: #004559;
+        }
+
+        .empty-state i {
+            font-size: 4em;
+            color: #D9D9D9;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .empty-state p {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+
+        .footer {
+            background: #004559;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 0.9em;
+        }
+
+        .footer a {
+            color: #C2E8FB;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .footer a:hover {
+            color: white;
+        }
+
+        .link-public {
+            color: #00A4D2;
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 10px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .link-public:hover {
+            color: #015A83;
+            background: rgba(0, 164, 210, 0.1);
+            transform: translateX(5px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-cog"></i> Administração - Portal KanaData</h1>
+            <p>Gerenciamento de Dashboards Power BI</p>
+        </div>
+
+        <div class="content">
+            <div class="actions">
+                <h2 style="color: #004559; font-size: 1.8em; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-th-large"></i> Meus Dashboards
+                </h2>
+                <div>
+                    <a href="{{ url_for('index') }}" class="link-public" target="_blank">
+                        <i class="fas fa-external-link-alt"></i> Ver Área Pública
+                    </a>
+                    <a href="{{ url_for('admin_logout') }}" class="btn btn-secondary" style="margin-left: 10px;">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </a>
+                    <a href="{{ url_for('admin_add') }}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle"></i> Adicionar Novo Dashboard
+                    </a>
+                </div>
+            </div>
+
+            {% if dashboards %}
+            <div class="dashboards-grid">
+                {% for dashboard in dashboards %}
+                <div class="dashboard-card">
+                    <div class="dashboard-preview">
+                        {% if dashboard.get('preview_image') %}
+                        <img src="{{ url_for('uploaded_file', filename=dashboard.preview_image) }}?v={{ range(1000, 9999) | random }}" 
+                             alt="{{ dashboard.name }}"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        {% else %}
+                        <div class="dashboard-preview-placeholder">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <h3><i class="fas fa-chart-bar"></i> {{ dashboard.name }}</h3>
+                    <div class="meta">
+                        <p><i class="fas fa-folder"></i> Categoria: <strong>{{ dashboard.get('category', 'Comercial') }}</strong></p>
+                        <p><i class="fas fa-calendar-plus"></i> Criado em: {{ dashboard.created_at }}</p>
+                        <p><i class="fas fa-sync-alt"></i> Atualizado em: {{ dashboard.updated_at }}</p>
+                    </div>
+                    <div>
+                        <span class="status {% if dashboard.get('published', True) %}status-published{% else %}status-unpublished{% endif %}">
+                            <i class="fas {% if dashboard.get('published', True) %}fa-check-circle{% else %}fa-pause-circle{% endif %}"></i>
+                            {% if dashboard.get('published', True) %}
+                            Publicado
+                            {% else %}
+                            Não Publicado
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="actions-card">
+                        <a href="{{ url_for('view_dashboard', dashboard_id=dashboard.id) }}" 
+                           class="btn btn-secondary" target="_blank">
+                            <i class="fas fa-eye"></i> Visualizar
+                        </a>
+                        <a href="{{ url_for('admin_edit', dashboard_id=dashboard.id) }}" 
+                           class="btn btn-edit">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+                        <form method="POST" 
+                              action="{{ url_for('admin_toggle', dashboard_id=dashboard.id) }}" 
+                              style="display: inline;">
+                            <button type="submit" 
+                                    class="btn {% if dashboard.get('published', True) %}btn-warning{% else %}btn-success{% endif %}">
+                                <i class="fas {% if dashboard.get('published', True) %}fa-pause{% else %}fa-check{% endif %}"></i>
+                                {% if dashboard.get('published', True) %}
+                                Despublicar
+                                {% else %}
+                                Publicar
+                                {% endif %}
+                            </button>
+                        </form>
+                        <form method="POST" 
+                              action="{{ url_for('admin_delete', dashboard_id=dashboard.id) }}" 
+                              style="display: inline;"
+                              onsubmit="return confirm('Tem certeza que deseja excluir este dashboard?');">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash-alt"></i> Excluir
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <h2>Nenhum dashboard ainda</h2>
+                <p>Comece adicionando seu primeiro dashboard Power BI!</p>
+                <a href="{{ url_for('admin_add') }}" class="btn btn-primary">
+                    <i class="fas fa-plus-circle"></i> Adicionar Primeiro Dashboard
+                </a>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="footer">
+            <p>© 2025 Portal KanaData - Kanaflex | Área Administrativa</p>
+        </div>
+    </div>
+</body>
+</html>

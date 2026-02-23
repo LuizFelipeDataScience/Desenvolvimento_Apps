@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Dashboard - Portal KanaData</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #00A4D2 0%, #015A83 50%, #004559 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #015A83 0%, #004559 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .header h1 i {
+            color: #C2E8FB;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #004559;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #D9D9D9;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: 'Courier New', monospace;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #00A4D2;
+        }
+
+        .form-group textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        .form-help {
+            margin-top: 8px;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .form-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-checkbox input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            margin-right: 10px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn i {
+            transition: transform 0.3s;
+        }
+
+        .btn:hover i {
+            transform: scale(1.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00A4D2 0%, #015A83 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 164, 210, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #004559;
+            border: 2px solid #D9D9D9;
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #C2E8FB 0%, #ffffff 100%);
+            border-color: #00A4D2;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 164, 210, 0.3);
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #C2E8FB 0%, #a8d8f0 100%);
+            border-left: 4px solid #00A4D2;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            color: #004559;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(0, 164, 210, 0.2);
+        }
+
+        .info-box i {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-edit"></i> Editar Dashboard</h1>
+            <p>Renomeie ou atualize o código do iframe</p>
+        </div>
+
+        <div class="content">
+            <div class="info-box">
+                <i class="fas fa-info-circle"></i>
+                <strong>Informação:</strong> Você pode alterar o nome, atualizar o código HTML do iframe e também trocar a imagem de preview.
+            </div>
+
+            <form method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="name"><i class="fas fa-tag"></i> Nome do Dashboard *</label>
+                    <input type="text" 
+                           id="name" 
+                           name="name" 
+                           value="{{ dashboard.name }}"
+                           required>
+                    <div class="form-help">
+                        Nome que aparecerá na lista de dashboards
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="category"><i class="fas fa-folder"></i> Categoria *</label>
+                    <select id="category" 
+                            name="category" 
+                            required
+                            style="width: 100%; padding: 12px; border: 2px solid #D9D9D9; border-radius: 8px; font-size: 1em; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: border-color 0.3s;">
+                        <option value="Comercial" {% if dashboard.get('category', 'Comercial') == 'Comercial' %}selected{% endif %}>Comercial</option>
+                        <option value="Controladoria" {% if dashboard.get('category', 'Comercial') == 'Controladoria' %}selected{% endif %}>Controladoria</option>
+                        <option value="Estoque/Fabrica" {% if dashboard.get('category', 'Comercial') == 'Estoque/Fabrica' %}selected{% endif %}>Estoque/Fabrica</option>
+                        <option value="RH" {% if dashboard.get('category', 'Comercial') == 'RH' %}selected{% endif %}>RH</option>
+                        <option value="Tecnologia" {% if dashboard.get('category', 'Comercial') == 'Tecnologia' %}selected{% endif %}>Tecnologia</option>
+                    </select>
+                    <div class="form-help">
+                        Selecione a categoria do dashboard
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="preview_image"><i class="fas fa-image"></i> Imagem de Preview (Print do Dashboard) - Opcional</label>
+                    {% if dashboard.get('preview_image') %}
+                    <div style="margin-bottom: 15px; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                        <img src="{{ url_for('uploaded_file', filename=dashboard.preview_image) }}?v={{ range(1000, 9999) | random }}" 
+                             alt="Preview atual" 
+                             style="width: 100%; max-width: 600px; height: auto; max-height: 200px; object-fit: contain; border-radius: 8px; border: 2px solid #D9D9D9; display: block; margin-bottom: 10px; background: white;">
+                        <p style="color: #666; font-size: 0.9em; margin: 5px 0;">Imagem atual (envie nova para substituir ou marque abaixo para remover)</p>
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #dc3545; font-size: 0.9em;">
+                            <input type="checkbox" name="remove_preview_image" value="1" style="cursor: pointer;">
+                            <i class="fas fa-trash"></i> Remover imagem atual
+                        </label>
+                    </div>
+                    {% endif %}
+                    <input type="file" 
+                           id="preview_image" 
+                           name="preview_image" 
+                           accept="image/png,image/jpeg,image/jpg,image/gif,image/webp">
+                    <div class="form-help">
+                        Faça um print do dashboard e envie aqui. Ajuda na visualização (PNG, JPG, GIF - Max 16MB)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="iframe_html"><i class="fas fa-code"></i> Código HTML do Iframe (Opcional - para atualizar)</label>
+                    <textarea id="iframe_html" 
+                              name="iframe_html" 
+                              placeholder="Deixe em branco se não quiser alterar o iframe...">{{ dashboard.iframe_html }}</textarea>
+                    <div class="form-help">
+                        Cole o novo código HTML do iframe apenas se quiser atualizá-lo
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-checkbox">
+                        <input type="checkbox" 
+                               id="published" 
+                               name="published" 
+                               {% if dashboard.get('published', True) %}checked{% endif %}>
+                        <label for="published" style="font-weight: normal; cursor: pointer;">
+                            Publicado (visível na área pública)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Salvar Alterações
+                    </button>
+                    <a href="{{ url_for('admin_index') }}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+

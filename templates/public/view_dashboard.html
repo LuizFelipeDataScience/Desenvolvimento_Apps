@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title>{{ dashboard.name }} - Portal KanaData</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // Verificar se está em HTTPS, se não, avisar
+        if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+            console.warn('⚠️ HTTPS não detectado. Power BI pode não funcionar corretamente.');
+            console.warn('Execute: gerar_certificado.bat e reinicie o servidor.');
+        }
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000;
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            height: 100vh;
+            margin: 0 auto;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #015A83 0%, #004559 100%);
+            color: white;
+            padding: 4px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            height: 35px;
+        }
+
+        .header h1 {
+            font-size: 0.9em;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header h1 i {
+            color: #C2E8FB;
+        }
+
+        .btn {
+            padding: 4px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.75em;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-light {
+            background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%);
+            color: #015A83;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-light:hover {
+            background: linear-gradient(135deg, #C2E8FB 0%, #ffffff 100%);
+            border-color: #C2E8FB;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(194, 232, 251, 0.4);
+        }
+
+        .btn-light i {
+            transition: transform 0.3s;
+        }
+
+        .btn-light:hover i {
+            transform: translateX(-3px);
+        }
+
+        .dashboard-container {
+            flex: 1;
+            width: 100%;
+            padding: 0;
+            background: #000;
+            overflow: hidden;
+            display: flex;
+            align-items: stretch;
+            justify-content: stretch;
+            min-height: 0;
+        }
+
+        .dashboard-wrapper {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            overflow: hidden;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        .dashboard-wrapper iframe {
+            width: 100% !important;
+            height: 100% !important;
+            border: none !important;
+            display: block;
+            /* Permitir APIs de criptografia necessárias para Power BI */
+            allow: "fullscreen; autoplay; encrypted-media; microphone; camera";
+        }
+
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1em;
+            }
+            
+            .btn {
+                padding: 6px 12px;
+                font-size: 0.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-chart-pie"></i> {{ dashboard.name }}</h1>
+            <a href="{{ url_for('index') }}" class="btn btn-light">
+                <i class="fas fa-arrow-left"></i>
+                <span>Voltar</span>
+            </a>
+        </div>
+
+        <div class="dashboard-container">
+            <div class="dashboard-wrapper">
+                {{ dashboard.iframe_html|safe }}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

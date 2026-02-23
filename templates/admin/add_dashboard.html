@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Dashboard - Portal KanaData</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #00A4D2 0%, #015A83 50%, #004559 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #015A83 0%, #004559 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .header h1 i {
+            color: #C2E8FB;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #004559;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #D9D9D9;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: 'Courier New', monospace;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #00A4D2;
+        }
+
+        .form-group textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        .form-help {
+            margin-top: 8px;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .form-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-checkbox input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .example-box {
+            background: linear-gradient(135deg, #C2E8FB 0%, #a8d8f0 100%);
+            border-left: 4px solid #00A4D2;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 164, 210, 0.2);
+        }
+
+        .example-box strong {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            color: #004559;
+        }
+
+        .example-box code {
+            display: block;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #004559;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            margin-right: 10px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn i {
+            transition: transform 0.3s;
+        }
+
+        .btn:hover i {
+            transform: scale(1.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00A4D2 0%, #015A83 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 164, 210, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #004559;
+            border: 2px solid #D9D9D9;
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #C2E8FB 0%, #ffffff 100%);
+            border-color: #00A4D2;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 164, 210, 0.3);
+        }
+
+        .error {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #dc3545;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2);
+        }
+
+        .error i {
+            font-size: 1.2em;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-plus-circle"></i> Adicionar Dashboard</h1>
+            <p>Cole o código HTML do iframe do Power BI</p>
+        </div>
+
+        <div class="content">
+            {% if error %}
+            <div class="error">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>Erro:</strong> {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="custom_name"><i class="fas fa-tag"></i> Nome do Dashboard (Opcional)</label>
+                    <input type="text" 
+                           id="custom_name" 
+                           name="custom_name" 
+                           placeholder="Ex: DashComercial Kanaflex"
+                           value="{{ request.form.custom_name if request.form }}">
+                    <div class="form-help">
+                        Se não informar, será usado o título do iframe
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="category"><i class="fas fa-folder"></i> Categoria *</label>
+                    <select id="category" 
+                            name="category" 
+                            required
+                            style="width: 100%; padding: 12px; border: 2px solid #D9D9D9; border-radius: 8px; font-size: 1em; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: border-color 0.3s;">
+                        <option value="Comercial" {% if request.form and request.form.category == 'Comercial' %}selected{% endif %}>Comercial</option>
+                        <option value="Controladoria" {% if request.form and request.form.category == 'Controladoria' %}selected{% endif %}>Controladoria</option>
+                        <option value="Estoque/Fabrica" {% if request.form and request.form.category == 'Estoque/Fabrica' %}selected{% endif %}>Estoque/Fabrica</option>
+                        <option value="RH" {% if request.form and request.form.category == 'RH' %}selected{% endif %}>RH</option>
+                        <option value="Tecnologia" {% if request.form and request.form.category == 'Tecnologia' %}selected{% endif %}>Tecnologia</option>
+                    </select>
+                    <div class="form-help">
+                        Selecione a categoria do dashboard
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="preview_image"><i class="fas fa-image"></i> Imagem de Preview (Print do Dashboard) - Opcional</label>
+                    <input type="file" 
+                           id="preview_image" 
+                           name="preview_image" 
+                           accept="image/*">
+                    <div class="form-help">
+                        Faça um print do dashboard e envie aqui. Ajuda na visualização (PNG, JPG, GIF - Max 16MB)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="iframe_html"><i class="fas fa-code"></i> Código HTML do Iframe *</label>
+                    <textarea id="iframe_html" 
+                              name="iframe_html" 
+                              placeholder="Cole aqui o código HTML do iframe do Power BI..."
+                              required>{{ request.form.iframe_html if request.form }}</textarea>
+                    <div class="form-help">
+                        Cole o código completo do iframe fornecido pelo Power BI
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-checkbox">
+                        <input type="checkbox" 
+                               id="published" 
+                               name="published" 
+                               checked>
+                        <label for="published" style="font-weight: normal; cursor: pointer;">
+                            Publicar imediatamente (visível na área pública)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <strong><i class="fas fa-clipboard-list"></i> Como obter o código correto:</strong>
+                    <ol style="margin: 10px 0; padding-left: 20px; color: #004559;">
+                        <li>Acesse: <a href="https://app.powerbi.com" target="_blank">https://app.powerbi.com</a></li>
+                        <li>Abra o relatório que deseja incorporar</li>
+                        <li>Clique em <strong>"..."</strong> (três pontos) → <strong>Embed</strong> → <strong>Website or portal</strong></li>
+                        <li>Copie o código do iframe gerado</li>
+                        <li>Cole aqui no formulário</li>
+                    </ol>
+                    <p style="margin-top: 10px; color: #004559; font-weight: 600;">
+                        ⚠️ IMPORTANTE: Use o código gerado no Power BI (não copie de outro lugar)
+                    </p>
+                </div>
+
+                <div class="actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Salvar Dashboard
+                    </button>
+                    <a href="{{ url_for('admin_index') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+

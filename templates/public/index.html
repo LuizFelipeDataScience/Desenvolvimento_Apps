@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal KanaData - Dashboards Power BI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #00A4D2 0%, #015A83 50%, #004559 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #015A83 0%, #004559 100%);
+            color: white;
+            padding: 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(194, 232, 251, 0.1) 0%, transparent 70%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 i {
+            margin-right: 15px;
+            color: #C2E8FB;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .header p {
+            font-size: 1.3em;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            padding: 50px;
+        }
+
+        .search-filter-section {
+            margin-bottom: 40px;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid #D9D9D9;
+            border-radius: 12px;
+            font-size: 1.1em;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #00A4D2;
+            box-shadow: 0 6px 20px rgba(0, 164, 210, 0.3);
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-size: 1.2em;
+        }
+
+        .category-section {
+            margin-bottom: 50px;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #00A4D2;
+        }
+
+        .category-header h2 {
+            color: #004559;
+            font-size: 2em;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .category-header i {
+            color: #00A4D2;
+            font-size: 1.5em;
+        }
+
+        .category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #00A4D2 0%, #015A83 100%);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .no-results i {
+            font-size: 4em;
+            color: #D9D9D9;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .no-results h3 {
+            color: #004559;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .dashboards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .dashboard-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border: 2px solid transparent;
+            border-radius: 20px;
+            padding: 35px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 164, 210, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .dashboard-card:hover::before {
+            left: 100%;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(1, 90, 131, 0.25);
+            border-color: #00A4D2;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%);
+        }
+
+        .dashboard-card h3 {
+            color: #004559;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            word-wrap: break-word;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        .dashboard-card .preview-wrapper {
+            width: 100%;
+            height: 0;
+            padding-bottom: 50%;
+            margin: 0 auto 20px;
+            border-radius: 15px;
+            overflow: hidden;
+            background: #f0f0f0;
+            position: relative;
+            border: 2px solid #D9D9D9;
+            transition: all 0.4s;
+        }
+
+        .dashboard-card .preview-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: white;
+        }
+
+        .dashboard-card .icon-wrapper {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #00A4D2 0%, #015A83 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 8px 20px rgba(0, 164, 210, 0.3);
+        }
+
+        .dashboard-card .icon-wrapper i {
+            font-size: 2.5em;
+            color: white;
+            transition: all 0.4s;
+        }
+
+        .dashboard-card:hover .preview-wrapper {
+            transform: scale(1.02);
+            border-color: #00A4D2;
+            box-shadow: 0 8px 20px rgba(0, 164, 210, 0.3);
+        }
+
+        .dashboard-card:hover .icon-wrapper {
+            transform: rotate(5deg) scale(1.1);
+            box-shadow: 0 12px 30px rgba(0, 164, 210, 0.5);
+            background: linear-gradient(135deg, #015A83 0%, #004559 100%);
+        }
+
+        .dashboard-card:hover .icon-wrapper i {
+            transform: scale(1.2);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #666;
+        }
+
+        .empty-state h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #004559;
+        }
+
+        .empty-state i {
+            font-size: 4em;
+            color: #D9D9D9;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .empty-state p {
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        .footer {
+            background: #004559;
+            color: white;
+            padding: 25px;
+            text-align: center;
+            font-size: 1em;
+        }
+
+        .footer a {
+            color: #C2E8FB;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .footer a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-chart-line"></i> Portal KanaData</h1>
+            <p>Dashboards Power BI</p>
+        </div>
+
+        <div class="content">
+            <div class="search-filter-section">
+                <div class="search-box">
+                    <input type="text" 
+                           id="searchInput" 
+                           placeholder="Buscar dashboards por nome..." 
+                           onkeyup="filterDashboards()">
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+
+            {% if dashboards %}
+            {% set categories = ['Comercial', 'Controladoria', 'Estoque/Fabrica', 'RH', 'Tecnologia'] %}
+            {% for category in categories %}
+            {% set category_dashboards = [] %}
+            {% for dashboard in dashboards %}
+                {% if dashboard.get('category', 'Comercial') == category %}
+                    {% set _ = category_dashboards.append(dashboard) %}
+                {% endif %}
+            {% endfor %}
+            {% if category_dashboards %}
+            <div class="category-section" data-category="{{ category }}">
+                <div class="category-header">
+                    <i class="fas fa-folder-open"></i>
+                    <h2>{{ category }}</h2>
+                    <span class="category-badge">
+                        <i class="fas fa-chart-bar"></i>
+                        {{ category_dashboards | length }} dashboard{{ 's' if category_dashboards | length > 1 else '' }}
+                    </span>
+                </div>
+                <div class="dashboards-grid">
+                    {% for dashboard in category_dashboards %}
+                    <a href="{{ url_for('view_dashboard', dashboard_id=dashboard.id) }}" 
+                       class="dashboard-card" 
+                       data-name="{{ dashboard.name | lower }}">
+                        {% if dashboard.get('preview_image') %}
+                        <div class="preview-wrapper">
+                            <img src="{{ url_for('uploaded_file', filename=dashboard.preview_image) }}?v={{ range(1000, 9999) | random }}" 
+                                 alt="{{ dashboard.name }}"
+                                 onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'icon-wrapper\'><i class=\'fas fa-chart-bar\'></i></div>';">
+                        </div>
+                        {% else %}
+                        <div class="icon-wrapper">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        {% endif %}
+                        <h3>{{ dashboard.name }}</h3>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+
+            {% set uncategorized = [] %}
+            {% for dashboard in dashboards %}
+                {% if not dashboard.get('category') or dashboard.get('category') not in categories %}
+                    {% set _ = uncategorized.append(dashboard) %}
+                {% endif %}
+            {% endfor %}
+            {% if uncategorized %}
+            <div class="category-section" data-category="Sem Categoria">
+                <div class="category-header">
+                    <i class="fas fa-folder"></i>
+                    <h2>Sem Categoria</h2>
+                    <span class="category-badge">
+                        <i class="fas fa-chart-bar"></i>
+                        {{ uncategorized | length }} dashboard{{ 's' if uncategorized | length > 1 else '' }}
+                    </span>
+                </div>
+                <div class="dashboards-grid">
+                    {% for dashboard in uncategorized %}
+                    <a href="{{ url_for('view_dashboard', dashboard_id=dashboard.id) }}" 
+                       class="dashboard-card" 
+                       data-name="{{ dashboard.name | lower }}">
+                        {% if dashboard.get('preview_image') %}
+                        <div class="preview-wrapper">
+                            <img src="{{ url_for('uploaded_file', filename=dashboard.preview_image) }}?v={{ range(1000, 9999) | random }}" 
+                                 alt="{{ dashboard.name }}"
+                                 onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'icon-wrapper\'><i class=\'fas fa-chart-bar\'></i></div>';">
+                        </div>
+                        {% else %}
+                        <div class="icon-wrapper">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        {% endif %}
+                        <h3>{{ dashboard.name }}</h3>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <h2>Nenhum dashboard disponível</h2>
+                <p>Os dashboards serão exibidos aqui quando estiverem publicados.</p>
+            </div>
+            {% endif %}
+
+            <div id="noResults" class="no-results" style="display: none;">
+                <i class="fas fa-search"></i>
+                <h3>Nenhum resultado encontrado</h3>
+                <p>Tente buscar com outros termos.</p>
+            </div>
+        </div>
+
+        <script>
+        function filterDashboards() {
+            const searchInput = document.getElementById('searchInput');
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const dashboardCards = document.querySelectorAll('.dashboard-card');
+            const categorySections = document.querySelectorAll('.category-section');
+            let hasVisibleResults = false;
+
+            // Filtrar cards
+            dashboardCards.forEach(card => {
+                const name = card.getAttribute('data-name') || '';
+                if (name.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    hasVisibleResults = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Mostrar/ocultar seções de categoria baseado em resultados
+            categorySections.forEach(section => {
+                const visibleCards = section.querySelectorAll('.dashboard-card[style="display: block;"]');
+                if (visibleCards.length > 0) {
+                    section.style.display = 'block';
+                    hasVisibleResults = true;
+                } else {
+                    section.style.display = searchTerm === '' ? 'block' : 'none';
+                }
+            });
+
+            // Mostrar mensagem de "sem resultados"
+            const noResults = document.getElementById('noResults');
+            if (searchTerm !== '' && !hasVisibleResults) {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+            }
+        }
+        </script>
+
+        <div class="footer">
+            <p>© 2025 Portal KanaData - Kanaflex | https://dados.kanaflex.com.br</p>
+        </div>
+    </div>
+</body>
+</html>
